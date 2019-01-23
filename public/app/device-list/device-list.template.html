@@ -1,0 +1,56 @@
+<h1>Devices</h1>
+<div ng-if="! $ctrl.ready">
+    <div class="alert alert-info">Loading...</div>
+</div>
+<div ng-if="$ctrl.ready">
+    <div class="mb-2">
+        <input ng-model="search" class="form-control" type="text" placeholder="Search..."/>
+    </div>
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+        <tr>
+            <th>MAC</th>
+            <th>Prod</th>
+            <th>Size</th>
+            <th>Batteries Replaced</th>
+
+            <th>Plugin</th>
+            <th>Layout</th>
+
+            <th>Checked In</th>
+            <th>Voltage</th>
+            <th>Firmware</th>
+            <th>IP</th>
+            <th>Error</th>
+
+            <th>Next Check In</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr class="device-row"
+            ng-repeat="device in $ctrl.devices | filter : search"
+            ng-click="$ctrl.open(device.device_id)">
+            <td>{{ device.mac_address }}</td>
+            <td ng-class="{'text-success': device.is_production, 'text-danger': !device.is_production}">
+                <span class="fas" ng-class="{'fa-check': device.is_production, 'fa-times': !device.is_production}"></span>
+            </td>
+            <td>{{ device.width }}x{{ device.height }}</td>
+            <td>{{ device.batteries_replaced_date|date:'M/d/yy'}}</td>
+
+            <td>{{ device.source_plugin }}</td>
+            <td>{{ device.layout_type }}</td>
+
+            <td>{{ device.check_in_dt|date:'M/d/yy h:mm a' }} <span ng-if="device.next_check_in_dt|isPast"
+                                                                    class="badge badge-warning">old</span></td>
+            <td>{{ device.voltage }} <span ng-if="device.voltage < 2.75" class="badge badge-warning">low</span></td>
+            <td>{{ device.firmware_version }}</td>
+            <td>{{ device.remote_address }}</td>
+            <td ng-class="{'table-danger': device.error_code > 0}">{{ device.error_code|errorName }}</td>
+
+            <td>{{ device.next_check_in_dt|date:'M/d/yy h:mm a' }}</td>
+        </tr>
+        <tr ng-if="$ctrl.devices.length == 0"><td colspan="11" class="info">No Devices Yet!</td></tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,4 @@
+/vendor
+/.idea
+/config/config.*.php
+!/config/config.default.php

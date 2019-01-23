@@ -1,0 +1,7 @@
+.device-row {
+    cursor: pointer;
+}
+
+.img-preview.loading {
+    opacity: 0.5;
+}

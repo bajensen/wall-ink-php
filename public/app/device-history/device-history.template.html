@@ -1,0 +1,30 @@
+<h1>Device History: {{$ctrl.deviceHistory.device.mac_address}}</h1>
+<div ng-if="! $ctrl.ready">
+    <div class="alert alert-info">Loading...</div>
+</div>
+<div ng-if="$ctrl.ready">
+    <table class="table table-sm table-striped table-hover">
+        <thead>
+        <tr>
+            <th>Checked In</th>
+            <th>Voltage</th>
+            <th>Firmware</th>
+            <th>IP</th>
+            <th>Error</th>
+            <th>Next Check In</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="record in $ctrl.deviceHistory.history">
+            <td>{{ record.check_in_dt|date:'M/d/yy h:mm a' }}</td>
+            <td>{{ record.voltage }} <span ng-if="record.voltage < 2.75" class="badge badge-warning">low</span></td>
+            <td>{{ record.firmware_version }}</td>
+            <td>{{ record.remote_address }}</td>
+            <td ng-class="{'table-danger': record.error_code > 0}">{{ record.error_code|errorName }}</td>
+            <td>{{ record.next_check_in_dt|date:'M/d/yy h:mm a' }}</td>
+        </tr>
+        <tr ng-if="$ctrl.deviceHistory.history.length == 0"><td colspan="11" class="info">No history Yet!</td></tr>
+        </tbody>
+    </table>
+</div>

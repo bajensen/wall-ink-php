@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" ng-app="winkApp">
+<head>
+    <title>Wink</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"/>
+
+    <link rel="stylesheet" href="/app.css"/>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-route.min.js"></script>
+
+    <script src="/app/app.module.js"></script>
+    <script src="/app/app.config.js"></script>
+    <script src="/app/app.directive.js"></script>
+    <script src="/app/app.filter.js"></script>
+    <script src="/app/device-list/device-list.module.js"></script>
+    <script src="/app/device-list/device-list.component.js"></script>
+    <script src="/app/device-detail/device-detail.module.js"></script>
+    <script src="/app/device-detail/device-detail.component.js"></script>
+    <script src="/app/device-history/device-history.module.js"></script>
+    <script src="/app/device-history/device-history.component.js"></script>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="">Wink</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link"
+               ng-class="{'active': $route.current.activetab == 'devices'}" href="#!/devices">
+                List
+            </a>
+            <a class="nav-item nav-link"
+               href="#!/device/{{$route.current.params.deviceId}}"
+               ng-class="{active: $route.current.activetab == 'device'}"
+               ng-if="$route.current.has_device">
+                Device
+            </a>
+            <a class="nav-item nav-link"
+               href="#!/device_history/{{$route.current.params.deviceId}}"
+               ng-class="{active: $route.current.activetab == 'device_history'}"
+               ng-if="$route.current.has_device"">
+                History
+            </a>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid" ng-view></div>
+</body>
+</html>

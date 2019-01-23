@@ -1,0 +1,161 @@
+<h1>Device: {{$ctrl.device.mac_address}}</h1>
+<div ng-if="! $ctrl.ready">
+    <div class="alert alert-info">Loading...</div>
+</div>
+<div ng-if="$ctrl.ready">
+    <form method="post">
+        <div class="mb-2">
+            <input type="submit" value="Save" class="btn btn-secondary"
+                   ng-click="$ctrl.save()"
+                   ng-class="{'btn-success': $ctrl.canSave(), disabled: ! $ctrl.canSave()}"/>
+            <a href="#!/devices" class="btn btn-light">Cancel</a>
+            <a ng-click="$ctrl.clearAll()" class="btn btn-light text-danger">Clear All</a>
+            <a ng-click="$ctrl.delete()" class="btn btn-light"
+               ng-class="{'btn-light text-danger': ! $ctrl.deleteConfirm, 'btn-danger': $ctrl.deleteConfirm}">
+                <span ng-if="! $ctrl.deleteConfirm">Delete</span>
+                <span ng-if="$ctrl.deleteConfirm">Confirm</span>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="card mb-4">
+                    <div class="card-header">Device <span ng-if="$ctrl.device.is_production"
+                                                          class="badge badge-success">Production</span></div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="macAddress" class="col-sm-5 col-form-label">MAC Address</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="macAddress" placeholder="A1B2C3D4E5F6"
+                                       ng-model="$ctrl.device.mac_address"
+                                       required
+                                       pattern="[0-9A-F]{12}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="width" class="col-sm-5 col-form-label">Width</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="width"
+                                       ng-model="$ctrl.device.width"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="height" class="col-sm-5 col-form-label">Height</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="height"
+                                       ng-model="$ctrl.device.height"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-5 col-form-label"></label>
+                            <div class="col-sm-7">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="productionCheck"
+                                           ng-model="$ctrl.device.is_production" ng-true-value="1" ng-false-value="0">
+                                    <label class="custom-control-label" for="productionCheck">Production</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="batteries_replaced_date" class="col-sm-5 col-form-label">Batteries
+                                Replaced</label>
+                            <div class="col-sm-7">
+                                <input type="text" readonly class="form-control-plaintext" id="batteries_replaced_date"
+                                       value="{{$ctrl.device.batteries_replaced_date|date:'M/d/yy h:mm a'}}">
+                                <button class="btn btn-light" ng-click="$ctrl.resetBattery()">Reset</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea class="form-control" id="notes"
+                                      ng-model="$ctrl.device.notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="card mb-4">
+                    <div class="card-header">Layout</div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="layoutType" class="col-sm-5 col-form-label">Layout</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="layoutType"
+                                        ng-change="change()"
+                                        ng-model="$ctrl.device.layout_type"
+                                        ng-options="key as value.name for (key, value) in $ctrl.layouts"
+                                        required></select>
+                            </div>
+                        </div>
+                        <div class="form-group row"
+                             ng-repeat="(key, value) in $ctrl.layout_options[$ctrl.device.layout_type]">
+                            <label class="col-sm-5 col-form-label">{{value.name}}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control"
+                                        ng-if="value.type == 'select'"
+                                        ng-change="change()"
+                                        ng-model="$ctrl.device.layout_options[key]"
+                                        ng-options="optionKey as optionValue for (optionKey, optionValue) in value.options"></select>
+                                <input type="text" class="form-control"
+                                       ng-if="value.type == 'short_text'"
+                                       ng-change="change()"
+                                       ng-model="$ctrl.device.layout_options[key]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="card mb-4"
+                     ng-if="$ctrl.device.layout_type && $ctrl.layouts[$ctrl.device.layout_type].uses_source">
+                    <div class="card-header">Source</div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="source" class="col-sm-5 col-form-label">Source</label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="source"
+                                        ng-change="change()"
+                                        ng-model="$ctrl.device.source_plugin"
+                                        ng-options="key as value.name for (key, value) in $ctrl.sources"
+                                        required></select>
+                            </div>
+                        </div>
+                        <div class="form-group row"
+                             ng-repeat="(key, value) in $ctrl.source_options[$ctrl.device.source_plugin]">
+                            <label class="col-sm-5 col-form-label">{{value.name}}</label>
+                            <div class="col-sm-7">
+                                <select class="form-control"
+                                        ng-if="value.type == 'select'"
+                                        ng-change="change()"
+                                        ng-model="$ctrl.device.source_options[key]"
+                                        ng-options="optionKey as optionValue for (optionKey, optionValue) in value.options"></select>
+                                <input type="text" class="form-control"
+                                       ng-if="value.type == 'short_text'"
+                                       ng-change="change()"
+                                       ng-model="$ctrl.device.source_options[key]"/>
+                            </div>
+                        </div>
+                        <div ng-if="$ctrl.source_options[$ctrl.device.source_plugin].length == 0">
+                            <div class="alert alert-info">No source options available.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <pre>{{$ctrl.device|json}}</pre>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xl-12">
+                <div class="card" ng-if="$ctrl.isValid()">
+                    <div class="card-header">Preview</div>
+                    <div class="card-body">
+                        <img class="img-fluid img-preview"
+                             data-placeholder-width="{{$ctrl.device.width}}"
+                             data-placeholder-height="{{$ctrl.device.height}}"
+                             ng-slow-src="{{$ctrl.previewUrl($ctrl.device)}}" alt="Preview"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
