@@ -38,4 +38,8 @@ abstract class AbstractHandler {
         return $this->app->getContainer()->get('view');
     }
 
+    protected function withJsonResponse($data, $status = 200) {
+        return $this->response->withJson($data, $status, JSON_NUMERIC_CHECK);
+    }
+
 }

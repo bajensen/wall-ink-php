@@ -24,14 +24,14 @@ class AdminHandler extends AbstractHandler {
 
     public function devicesJson () {
         $devices = $this->dao->getDevices();
-        return $this->response->withJson($devices);
+        return $this->withJsonResponse($devices);
     }
 
     public function deviceHistoryJson ($deviceId) {
         $device = $this->dao->getDevice($deviceId);
         $deviceHistory = $this->dao->getDeviceHistory($deviceId);
 
-        return $this->response->withJson([
+        return $this->withJsonResponse([
             'device' => $device,
             'history' => $deviceHistory
         ]);
@@ -39,39 +39,39 @@ class AdminHandler extends AbstractHandler {
 
     public function deviceJson ($deviceId) {
         $device = $this->dao->getDevice($deviceId);
-        return $this->response->withJson($device);
+        return $this->withJsonResponse($device);
     }
 
     public function deleteDevice ($deviceId) {
         $device = $this->dao->deleteDevice($deviceId);
-        return $this->response->withJson($device);
+        return $this->withJsonResponse($device);
     }
 
     public function saveDevice ($deviceId) {
         $body = $this->request->getBody();
         $deviceJson = $body->getContents();
         $device = json_decode($deviceJson, true);
-        $this->dao->updateDevice($deviceId, $device);
+        $device = $this->dao->updateDevice($deviceId, $device);
 
-        print_r($device); exit;
+        return $this->withJsonResponse($device);
     }
 
     public function sourcesJson () {
         $pluginService = new Source($this->config);
         $plugins = $pluginService->getSources();
-        return $this->response->withJson($plugins);
+        return $this->withJsonResponse($plugins);
     }
 
     public function layoutsJson () {
         $layoutService = new Layout($this->config);
         $layouts = $layoutService->getLayouts();
-        return $this->response->withJson($layouts);
+        return $this->withJsonResponse($layouts);
     }
 
     public function pluginOptionsJson () {
         $pluginService = new Source($this->config);
         $resources = $this->getAllPluginOptions($pluginService);
-        return $this->response->withJson($resources);
+        return $this->withJsonResponse($resources);
     }
 
     public function completeOptionsJson () {
@@ -84,7 +84,7 @@ class AdminHandler extends AbstractHandler {
         $layoutOptions = $this->getAllLayoutOptions($layoutService);
         $pluginOptions = $this->getAllPluginOptions($pluginService);
 
-        return $this->response->withJson([
+        return $this->withJsonResponse([
             'sources' => $sources,
             'source_options' => $pluginOptions,
             'layouts' => $layouts,
@@ -113,7 +113,7 @@ class AdminHandler extends AbstractHandler {
     public function layoutOptionsJson () {
         $layoutOptions = $this->getAllLayoutOptions();
 
-        return $this->response->withJson($layoutOptions);
+        return $this->withJsonResponse($layoutOptions);
     }
 
     /**
