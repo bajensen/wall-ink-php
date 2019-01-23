@@ -1,5 +1,14 @@
 <?php
 return [
+    'cas' => [
+        'enabled' => true,                              // Enable CAS
+        'host' => 'cas.example.com',                    // CAS hostname
+        'port' => 443,                                  // CAS port
+        'context' => '/cas',                            // CAS context
+        'authz_users' => [
+            'my_username'                               // Change to your username. Add usernames.
+        ]
+    ],
     'settings' => [
         'displayErrorDetails' => false,                 // Shut off error details in production
     ],

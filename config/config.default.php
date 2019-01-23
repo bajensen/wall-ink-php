@@ -1,5 +1,8 @@
 <?php
 return [
+    'cas' => [
+        'enabled' => false,
+    ],
     'settings' => [
         'displayErrorDetails' => true,
     ],

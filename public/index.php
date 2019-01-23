@@ -35,6 +35,14 @@ $c['view'] = function ($container) {
 $app = new \Slim\App($c);
 $app->add(new \RKA\Middleware\IpAddress($appSettings['use_proxy_headers'], $appSettings['trusted_proxies']));
 
+if (isset($config['cas']['enabled']) && $config['cas']['enabled']) {
+    $app->add(new \Wink\Auth\CasMiddleware($config['cas']));
+}
+
+$app->get('/', function (Request $request, Response $response, array $args) use ($app) {
+    return $response->withRedirect('/admin');
+});
+
 $app->get('/display', function (Request $request, Response $response, array $args) use ($app) {
     $config = $app->getContainer()->get('wink_settings');
     $h = new \Wink\Handler\DisplayHandler($config, $app, $request, $response);
