@@ -1,22 +1,22 @@
 {
-    "name": "bjensen/msmdisplay",
-    "authors": [
-        {
-            "name": "Brendon Jensen",
-            "email": "brendonjensen@gmail.com"
-        }
-    ],
-    "require": {
-      "ext-imagick": "*",
-        "ext-pdo": "*",
-        "slim/slim": "^3.11",
-      "ext-json": "*",
-        "slim/php-view": "^2.2",
-        "akrabat/ip-address-middleware": "^1.0"
-    },
-    "autoload": {
-        "psr-0": {
-            "Wink\\": "src/"
-        }
+  "name": "bajensen/wall-ink-php",
+  "authors": [
+    {
+      "name": "Brendon Jensen",
+      "email": "brendonjensen@gmail.com"
     }
+  ],
+  "require": {
+    "ext-imagick": "*",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "slim/slim": "^3.11",
+    "slim/php-view": "^2.2",
+    "akrabat/ip-address-middleware": "^1.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Wink\\": "src/"
+    }
+  }
 }

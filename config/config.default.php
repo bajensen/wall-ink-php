@@ -10,7 +10,7 @@ return [
     ],
     'wink_settings' => [
         'dither' => false,
-        'refresh_seconds' => 30 * 60,
+        'refresh_seconds' => 30 * 60, // TODO: remove this setting
         'layouts' => [
             'setup' => ['class' => \Wink\Layout\Core\Setup::class],
             'error' => ['class' => \Wink\Layout\Core\Error::class],

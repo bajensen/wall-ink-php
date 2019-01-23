@@ -1,2 +1,3 @@
 config.*.php
 !config.default.php
+!config.*.example.php
