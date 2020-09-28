@@ -26,7 +26,7 @@ In my examples, I will be using `/opt/wink`.
 ```bash
 bob$ sudo -i
 root$ yum install -y epel-release
-root$ yum install -y git wget
+root$ yum install -y git wget zip unzip
 root$ mkdir -p /opt/wink
 root$ chown bob:bob /opt/wink
 root$ exit
@@ -98,11 +98,12 @@ Source for these instructions is https://webtatic.com/packages/php72/
 bob$ sudo -i
 root$ yum install -y epel-release
 root$ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-root$ yum install -y httpd mod_php72w php72w-cli php72w-pdo php72w-pecl-imagick
-root$ cat > /etc/httpd/conf.d/wink.conf
-apache-development.conf
-root$ systemctl enable httpd
-root$ systemctl start httpd
+root$ yum install -y httpd mod_php72w php72w-cli php72w-pdo php72w-pecl-imagick php72w-mysql
+root$ cp docs/apache-development.conf /etc/httpd/conf.d/wink.conf
+root$ systemctl enable --now httpd
+```
+Allow acceess through OS firewall
+```bash
 root$ firewall-cmd --add-service=http --permanent
 root$ firewall-cmd --reload
 ```
@@ -114,15 +115,9 @@ Autoload file not found. Run composer install.
 ```
 
 ### Step 4: Install dependencies by running composer install
-Source for these instructions is https://getcomposer.org/download/
-```bash
-bob$ cd /opt/wink
-bob$ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-bob$ php -r "if (hash_file('sha384', 'composer-setup.php') === '93b54496392c062774670ac18b134c3b3a95e5a5e5c8f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-bob$ php composer-setup.php
-bob$ php -r "unlink('composer-setup.php');"
-```
+Follow the instructions at https://getcomposer.org/download/ to install composer 
 
+Now install the PHP dependencies by running this command:
 ```bash
 bob$ php composer.phar install
 ```
@@ -139,7 +134,7 @@ File: /opt/wink/src/Wink/DB/PDO.php
 Line: 12
 ```
 
-This mean we are ready for the next step.
+This means we are ready for the next step.
 
 ### Step 5: Create wall ink server configuration
 
