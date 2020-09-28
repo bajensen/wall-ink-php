@@ -56,9 +56,8 @@ Source for these instructions is https://www.linode.com/docs/databases/mysql/how
 bob$ wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
 bob$ sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm
 bob$ sudo -i
-bob$ install -y mysql-server
-root$ systemctl start mysql.service
-root$ systemctl enable mysql.service
+root$ yum install -y mysql-server
+root$ systemctl enable --now mysql.service
 root$ mysql_secure_installation
 ```
 
